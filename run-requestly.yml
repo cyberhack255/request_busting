@@ -1,0 +1,18 @@
+- name: Run Requestly
+  hosts: servers
+  user: root
+  strategy: free 
+  vars:
+    time: 60
+    type: "volume"
+    method: "GET"
+    path: "/"
+    host: ""
+  tasks:
+
+        
+    - name: Run Requestly
+      ansible.builtin.command: pipenv run python3 requestly.py --host {{host}} --path {{path}} -m {{method}} -t {{time}} -ty {{type}}
+      args: 
+        chdir: /root/Requestly/
+

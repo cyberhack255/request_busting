@@ -1,0 +1,20 @@
+- name: Server Setup
+  hosts: servers
+  user: root
+  tasks:
+    - name: remove repo
+      ignore_errors: yes
+      shell: rm -r /root/Requestly
+
+    - name: Git clone program in. 
+      ansible.builtin.git:
+        repo: 'https://github.com/MrCooki/Requestly.git'
+        dest: /root/Requestly
+
+    - name: run pipenv
+      ansible.builtin.expect:
+        command: pipenv lock
+        chdir: /root/Requestly/
+        responses:
+          Question:
+            - y

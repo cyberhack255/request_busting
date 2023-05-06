@@ -1,0 +1,60 @@
+- name: Server Setup
+  hosts: servers
+  vars:
+    pyenv_path: ~/.pyenv/bin/
+  user: root
+  tasks:
+    
+    - name: Run the equivalent of "apt-get update" as a separate step
+      ansible.builtin.apt:
+        update_cache: yes
+
+    - name: Install a list of packages
+      ansible.builtin.apt:
+        pkg:
+        - python3-pip
+        - make
+        - build-essential
+        - git
+        - libssl-dev
+        - zlib1g-dev 
+        - libbz2-dev 
+        - libreadline-dev 
+        - libsqlite3-dev 
+        - wget 
+        - curl 
+        - llvm        
+        - libncurses5-dev 
+        - libncursesw5-dev 
+        - xz-utils 
+        - tk-dev
+
+    - name: Install pipenv python package
+      ansible.builtin.pip:
+        name: pipenv
+
+    - name: Install Pexpect
+      ansible.builtin.pip:
+        name: pexpect
+      become: yes
+    
+    - name: run curl to get pyenv
+      ignore_errors: yes
+      shell: curl -L https://raw.githubusercontent.com/pyenv/pyenv-installer/master/bin/pyenv-installer | bash
+      args:
+        warn: no
+
+    - name: Git clone program in.
+      ignore_errors: yes 
+      ansible.builtin.git:
+        repo: 'https://github.com/MrCooki/Requestly.git'
+        dest: /root/Requestly
+
+    - name: run pipenv
+      ansible.builtin.expect:
+        command: pipenv update
+        chdir: /root/Requestly/
+        responses:
+          Question:
+            - y
+

@@ -1,0 +1,17 @@
+- name: Run Background Traffic 
+  hosts: servers
+  user: root
+  vars:
+    time: 60
+    method: "GET"
+    host: ""
+  tasks:
+
+        
+    - name: Run Requestly
+      ansible.builtin.command: pipenv run python3 background_traffic.py --host {{host}}  -m {{method}} -t {{time}}
+      args: 
+        chdir: /root/Requestly/
+
+
+
